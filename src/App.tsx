@@ -13,15 +13,15 @@ import Watch from './pages/Watch';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="min-h-screen bg-black text-white">
         <Routes>
           <Route path="/watch/:id" element={<Watch />} />
           <Route
-            path="*"
+            path="/*"
             element={
               <>
                 <Navbar />
-                <main className="flex-grow">
+                <main>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/profiles" element={<Profiles />} />
