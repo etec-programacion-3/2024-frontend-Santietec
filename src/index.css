@@ -21,5 +21,6 @@
 
 /* Para Firefox */
 .custom-scrollbar {
+  
   scrollbar-width: none;
 }

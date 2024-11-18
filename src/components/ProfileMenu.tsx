@@ -19,7 +19,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ isOpen, onClose, onLogout }) 
     window.dispatchEvent(new Event('storage'));
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !currentProfile) return null;
 
   return (
     <div 
@@ -34,7 +34,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ isOpen, onClose, onLogout }) 
             onClick={() => handleProfileChange(profile)}
           >
             <img
-              src={profile.img}
+              src={profile.avatar_url}
               alt={profile.name}
               className="w-7 h-7 rounded"
             />
@@ -45,7 +45,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ isOpen, onClose, onLogout }) 
         ))}
         
         <div className="border-t border-gray-700 my-2" />
-        <div className="px-4 py-2 hover:bg-gray-600/30 cursor-pointer flex items-center gap-3">
+        <div 
+          onClick={() => navigate('/profiles/manage')}
+          className="px-4 py-2 hover:bg-gray-600/30 cursor-pointer flex items-center gap-3"
+        >
           <PenLine className="w-5 h-5" />
           <span>Administrar perfiles</span>
         </div>

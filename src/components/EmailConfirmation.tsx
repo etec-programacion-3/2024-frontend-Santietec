@@ -1,29 +1,34 @@
-import { Link, useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axiosInstance from '../axiosConfig';
 import { useState } from 'react';
 
-interface EmailConfirmationProps {
-  email: string;
-}
-
-const EmailConfirmation = ({ email }: EmailConfirmationProps) => {
+const EmailConfirmation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [email] = useState(location.state?.email || '');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    axios.post('/api/auth/register', {
-      email: email,
-      password: password
-    })
-    .then(function (response) {
-      console.log(response);
-      navigate('/signup/planform');
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    try {
+      console.log('Enviando datos:', { email, password });
+      
+      const response = await axiosInstance.post('/users/register', {
+        name: email.split('@')[0],
+        email,
+        password
+      });
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/signup/planform');
+      }
+    } catch (error: any) {
+      console.error('Error completo:', error);
+      console.error('Respuesta del servidor:', error.response?.data);
+      setError(error.response?.data?.message || 'Error al registrar usuario');
+    }
   };
 
   return (
@@ -45,6 +50,12 @@ const EmailConfirmation = ({ email }: EmailConfirmationProps) => {
           <h2 className="text-xl mb-4">Suscribirte a Netflix es fácil.</h2>
           <p className="text-lg mb-4">Ingresa tu contraseña para comenzar a ver al instante.</p>
           
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-sm text-gray-700">Email</label>

@@ -14,6 +14,9 @@ import EmailConfirmation from './components/EmailConfirmation';
 import PlanSelection from './components/PlanSelection';
 import PlanTable from './components/PlanTable';
 import PaymentForm from './components/PaymentForm';
+import CreateProfile from './pages/CreateProfile';
+import ProfileManager from './pages/ProfileManager';
+import EditProfile from './pages/EditProfile.tsx';
 
 function App() {
   return (
@@ -27,8 +30,10 @@ function App() {
             <Route path="/signup/planform" element={<PlanSelection />} />
             <Route path="/signup/plan-table" element={<PlanTable />} />
             <Route path="/signup/payment" element={<PaymentForm />} />
-            <Route path="/browse" element={<Browse />} />
             <Route path="/profiles" element={<Profiles />} />
+            <Route path="/profiles/new" element={<CreateProfile />} />
+            <Route path="/profiles/manage" element={<ProfileManager />} />
+            <Route path="/profiles/edit/:id" element={<EditProfile />} />
             <Route path="/watch/:id" element={<Watch />} />
             <Route
               path="/*"
@@ -37,7 +42,6 @@ function App() {
                   <Navbar />
                   <main>
                     <Routes>
-                      <Route path="/profiles" element={<Profiles />} />
                       <Route path="/browse" element={<Browse />} />
                       <Route path="/tv-shows" element={<TVShows />} />
                       <Route path="/movies" element={<Movies />} />

@@ -1,12 +1,42 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { HelpCircle } from 'lucide-react';
+import axios from 'axios';
 
 const PaymentForm = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    card_number: '',
+    expiration_date: '',
+    cvv: '',
+    card_holder: ''
+  });
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/profiles');
+    try {
+      const response = await axios.post('/users/subscribe', {
+        plan_id: 1, // O el ID del plan seleccionado
+        payment_method: 'credit_card',
+        ...formData
+      });
+
+      if (response.data.message === 'Subscription successful') {
+        navigate('/profiles');
+      }
+    } catch (error) {
+      setError('Error al procesar el pago. Por favor, intente nuevamente.');
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -25,9 +55,18 @@ const PaymentForm = () => {
         <p className="text-sm text-gray-500 mb-2">PASO 3 DE 3</p>
         <h1 className="text-3xl font-medium mb-6">Configura tu tarjeta de crédito o débito</h1>
 
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
+            name="card_number"
+            value={formData.card_number}
+            onChange={handleChange}
             placeholder="Número de tarjeta"
             className="w-full px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-gray-400"
           />
@@ -35,12 +74,18 @@ const PaymentForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
-              placeholder="Fecha de vencimiento"
+              name="expiration_date"
+              value={formData.expiration_date}
+              onChange={handleChange}
+              placeholder="MM/YY"
               className="px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-gray-400"
             />
             <div className="relative">
               <input
                 type="text"
+                name="cvv"
+                value={formData.cvv}
+                onChange={handleChange}
                 placeholder="CVV"
                 className="w-full px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-gray-400"
               />
@@ -50,19 +95,12 @@ const PaymentForm = () => {
 
           <input
             type="text"
+            name="card_holder"
+            value={formData.card_holder}
+            onChange={handleChange}
             placeholder="Nombre en la tarjeta"
             className="w-full px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-gray-400"
           />
-
-          <div className="bg-gray-50 p-4 rounded">
-            <div className="flex justify-between items-center mb-1">
-              <span>$ 9.699 al mes (sin impuestos incluidos)</span>
-              <button type="button" className="text-blue-600 hover:underline">
-                Cambiar
-              </button>
-            </div>
-            <span className="text-gray-600">Premium</span>
-          </div>
 
           <button
             type="submit"

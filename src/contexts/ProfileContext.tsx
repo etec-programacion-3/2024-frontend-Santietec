@@ -1,52 +1,74 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import axiosInstance from '../axiosConfig';
 
-export interface Profile {
+interface Profile {
   id: number;
   name: string;
-  img: string;
+  is_kids: boolean;
+  avatar_url: string;
+}
+
+interface ProfileData {
+  name: string;
+  is_kids: boolean;
+  avatar_url: string;
 }
 
 interface ProfileContextType {
-  currentProfile: Profile;
-  setCurrentProfile: (profile: Profile) => void;
   profiles: Profile[];
+  currentProfile: Profile | null;
+  setCurrentProfile: (profile: Profile) => void;
+  createProfile: (profileData: ProfileData) => Promise<void>;
+  loadProfiles: () => Promise<void>;
+  deleteProfile: (profileId: number) => Promise<void>;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const profiles = [
-    { 
-      id: 1, 
-      name: 'Papá', 
-      img: "/src/contexts/netflix-profile-pictures-1000-x-1000-w3lqr61qe57e9yt8.webp"
-    },
-    { 
-      id: 2, 
-      name: 'Mamá', 
-      img: '/src/contexts/imagenes-de-perfil-de-netflix-62wgyitks6f4l79m.webp'
-    },
-    { 
-      id: 3, 
-      name: 'Santi', 
-      img: '/src/contexts/personalizatu-perfil-de-netflix-con-la-imagen-perfecta-88wkdmjrorckekha.jpg'
-    },
-    { 
-      id: 4, 
-      name: 'Abuelo', 
-      img: '/src/contexts/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.webp'
-    },
-    { 
-      id: 5, 
-      name: 'Hermano', 
-      img: '/src/contexts/mantenteconectado-con-netflix-vnl1thqrh02x7ra2.jpg'
-    }
-  ];
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [currentProfile, setCurrentProfile] = useState<Profile | null>(null);
 
-  const [currentProfile, setCurrentProfile] = useState(profiles[0]);
+  const loadProfiles = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get('/users/profiles');
+      setProfiles(response.data);
+    } catch (error) {
+      console.error('Error loading profiles:', error);
+    }
+  }, []);
+
+  const createProfile = async (profileData: ProfileData) => {
+    try {
+      const response = await axiosInstance.post('/users/profiles', profileData);
+      setProfiles(prevProfiles => [...prevProfiles, response.data]);
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      throw error;
+    }
+  };
+
+  const deleteProfile = async (profileId: number) => {
+    try {
+      await axiosInstance.delete(`/users/profiles/${profileId}`);
+      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.id !== profileId));
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+      throw error;
+    }
+  };
 
   return (
-    <ProfileContext.Provider value={{ currentProfile, setCurrentProfile, profiles }}>
+    <ProfileContext.Provider 
+      value={{ 
+        profiles, 
+        currentProfile, 
+        setCurrentProfile, 
+        createProfile, 
+        loadProfiles,
+        deleteProfile 
+      }}
+    >
       {children}
     </ProfileContext.Provider>
   );
@@ -58,4 +80,4 @@ export const useProfile = () => {
     throw new Error('useProfile must be used within a ProfileProvider');
   }
   return context;
-}; 
+};

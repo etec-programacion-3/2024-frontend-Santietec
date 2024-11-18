@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,11 +10,20 @@ const Login = () => {
     password: '',
     remember: false
   });
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle authentication
-    navigate('/profiles');
+    try {
+      const response = await axiosInstance.post('/users/login', formData);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/profiles');
+      }
+    } catch (error) {
+      console.error('Error de inicio de sesión:', error);
+      setError('Error en el inicio de sesión');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
