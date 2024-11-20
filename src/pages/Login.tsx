@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,14 +15,18 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post('/users/login', formData);
+      const response = await axiosInstance.post('/users/login', {
+        email: formData.email,
+        password: formData.password
+      });
+
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         navigate('/profiles');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error de inicio de sesión:', error);
-      setError('Error en el inicio de sesión');
+      setError(error.response?.data?.message || 'Credenciales inválidas');
     }
   };
 
