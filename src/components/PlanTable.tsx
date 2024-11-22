@@ -119,7 +119,7 @@ const PlanTable = () => {
 
       <main className="max-w-4xl mx-auto px-4 py-12">
         <p className="text-sm text-gray-500 mb-2">PASO 2 DE 3</p>
-        <h1 className="text-3xl font-medium mb-8">Selecciona el plan ideal para ti</h1>
+        <h1 className="text-3xl font-medium text-black mb-8">Selecciona el plan ideal para ti</h1>
 
         <div className="grid md:grid-cols-2 gap-6">
           {plans.map((plan) => (
@@ -138,27 +138,27 @@ const PlanTable = () => {
               <div className="space-y-4">
                 <div>
                   <p className="text-gray-600">Precio mensual</p>
-                  <p className="text-xl font-bold">$ {plan.price}</p>
+                  <p className="text-xl font-bold text-black">$ {plan.price}</p>
                 </div>
 
                 <div>
                   <p className="text-gray-600">Calidad de audio y video</p>
-                  <p>{plan.quality}</p>
+                  <p className="text-black">{plan.quality}</p>
                 </div>
 
                 <div>
                   <p className="text-gray-600">Resolución</p>
-                  <p>{plan.resolution}</p>
+                  <p className="text-black">{plan.resolution}</p>
                 </div>
 
                 <div>
                   <p className="text-gray-600">Dispositivos compatibles</p>
-                  <p>{plan.devices}</p>
+                  <p className="text-black">{plan.devices}</p>
                 </div>
 
                 <div>
                   <p className="text-gray-600">Dispositivos de descarga</p>
-                  <p>{plan.downloads}</p>
+                  <p className="text-black">{plan.downloads}</p>
                 </div>
               </div>
             </div>

@@ -29,21 +29,21 @@ const PlanSelection = () => {
         
         <div className="text-center mb-8">
           <p className="text-sm text-gray-500 mb-2">PASO 2 DE 3</p>
-          <h1 className="text-3xl font-medium mb-4">Selecciona tu plan</h1>
+          <h1 className="text-3xl font-medium text-black mb-4">Selecciona tu plan</h1>
         </div>
 
         <ul className="space-y-4 mb-8">
           <li className="flex items-start">
             <Check className="w-5 h-5 text-red-600 mt-0.5 mr-2" />
-            <span>Sin compromisos, cancela cuando quieras.</span>
+            <span className="text-black">Sin compromisos, cancela cuando quieras.</span>
           </li>
           <li className="flex items-start">
             <Check className="w-5 h-5 text-red-600 mt-0.5 mr-2" />
-            <span>Todo Netflix a un bajo costo.</span>
+            <span className="text-black">Todo Netflix a un bajo costo.</span>
           </li>
           <li className="flex items-start">
             <Check className="w-5 h-5 text-red-600 mt-0.5 mr-2" />
-            <span>Disfruta sin límites en todos tus dispositivos.</span>
+            <span className="text-black">Disfruta sin límites en todos tus dispositivos.</span>
           </li>
         </ul>
 

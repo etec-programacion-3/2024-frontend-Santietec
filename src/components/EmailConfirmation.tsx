@@ -45,10 +45,10 @@ const EmailConfirmation = () => {
 
       <main className="max-w-lg mx-auto px-4 py-12">
         <div>
-          <p className="text-xs mb-2">PASO 1 DE 3</p>
-          <h1 className="text-3xl font-medium mb-4">¡Hola de nuevo!</h1>
-          <h2 className="text-xl mb-4">Suscribirte a Netflix es fácil.</h2>
-          <p className="text-lg mb-4">Ingresa tu contraseña para comenzar a ver al instante.</p>
+          <p className="text-xs text-black mb-2">PASO 1 DE 3</p>
+          <h1 className="text-3xl font-medium text-black mb-4">¡Hola de nuevo!</h1>
+          <h2 className="text-xl text-black mb-4">Suscribirte a Netflix es fácil.</h2>
+          <p className="text-lg text-black mb-4">Ingresa tu contraseña para comenzar a ver al instante.</p>
           
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
